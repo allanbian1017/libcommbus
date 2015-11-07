@@ -6,16 +6,19 @@ CFLAGS += -I/usr/local/include/libusb-1.0/
 CPPFLAGS = -Wall -Iinclude/
 LIBS = -lcommbus
 LDFLAGS = 
-LIB_OBJS = uart_linux.o
+LIB_OBJS = uart_linux.o spi_linux.o
 UART_RESP_OBJS = uart_resp.o
 UART_SEND_OBJS = uart_send.o
+SPI_FRAM_OBJS = spi_fram.o
 
-all: libcommbus.a libcommbus.so uart_resp uart_send
+all: libcommbus.a libcommbus.so uart_resp uart_send spi_fram
 
 uart_send: $(addprefix test/, ${UART_SEND_OBJS})
 	$(CC) -o $@ ${UART_SEND_OBJS} ${LIBS} ${LDFLAGS}
 uart_resp: $(addprefix test/, ${UART_RESP_OBJS})
 	$(CC) -o $@ ${UART_RESP_OBJS} ${LIBS} ${LDFLAGS}
+spi_fram: $(addprefix test/, ${SPI_FRAM_OBJS})
+	$(CC) -o $@ ${SPI_FRAM_OBJS} ${LIBS} ${LDFLAGS}
 libcommbus.so: $(addprefix lib/, ${LIB_OBJS})
 	$(CC) -shared -fPIC -o $@ ${LIB_OBJS}
 libcommbus.a: $(addprefix lib/, ${LIB_OBJS})
@@ -26,5 +29,5 @@ libcommbus.a: $(addprefix lib/, ${LIB_OBJS})
 %.o: %.cpp
 	$(CPP) -c $< ${CPPFLAGS}
 clean:
-	rm -f libcommbus.a libcommbus.so uart_resp uart_send ${UART_SEND_OBJS} ${UART_RESP_OBJS} ${LIB_OBJS}
+	rm -f libcommbus.a libcommbus.so uart_resp uart_send spi_fram ${UART_SEND_OBJS} ${UART_RESP_OBJS} ${SPI_FRAM_OBJS} ${LIB_OBJS}
 
