@@ -26,8 +26,6 @@
 #include "commbus.h"
 #include "uart.h"
 
-#define CONFIG_SKIP_ZLT
-
 static int uart_fd[COM_MAX];
 
 int uart_open(int com, int baudrate, int parity, int databits, int stopbits)
@@ -224,31 +222,10 @@ int uart_write(int com, unsigned char *data, int len)
 	sent = 0;
 	remain = len;
 	do {
-#ifdef CONFIG_SKIP_ZLT
-		if (remain % 512 == 0) {
-			n = write(uart_fd[com], &data[sent], remain - 1);
-			if (n < 0) {
-				return sent;
-			}
-
-			sent += n;
-
-			n = write(uart_fd[com], &data[sent], 1);
-                        if (n < 0) {
-                                return sent;
-                        }
-		} else {
-			n = write(uart_fd[com], &data[sent], remain);
-                        if (n < 0) {
-                                return sent;
-                        }
-		}
-#else
 		n = write(uart_fd[com], &data[sent], remain);
 		if (n < 0) {
 			return sent;
 		}
-#endif
 
 		sent += n;
 		remain = len - sent;
