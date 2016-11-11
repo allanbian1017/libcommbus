@@ -13,7 +13,7 @@ SOCKET_RESP_OBJS = socket_resp.o
 SOCKET_SEND_OBJS = socket_send.o
 SPI_FRAM_OBJS = spi_fram.o
 
-all: libcommbus.a libcommbus.so uart_resp uart_send spi_fram socket_send socket_resp
+all: libcommbus.so uart_resp uart_send spi_fram socket_send socket_resp
 
 uart_send: $(addprefix test/, ${UART_SEND_OBJS})
 	$(CC) -o $@ ${UART_SEND_OBJS} ${LIBS} ${LDFLAGS}
@@ -31,9 +31,9 @@ libcommbus.a: $(addprefix lib/, ${LIB_OBJS})
 	$(AR) rcs $@ ${LIB_OBJS}
 	
 %.o: %.c
-	$(CC) -c $< ${CFLAGS}
+	$(CC) -c -fPIC $< ${CFLAGS}
 %.o: %.cpp
-	$(CPP) -c $< ${CPPFLAGS}
+	$(CPP) -c -fPIC $< ${CPPFLAGS}
 clean:
-	rm -f libcommbus.a libcommbus.so uart_resp uart_send spi_fram socket_send socket_resp ${UART_SEND_OBJS} ${UART_RESP_OBJS} ${SOCKET_SEND_OBJS} ${SOCKET_RESP_OBJS} ${SPI_FRAM_OBJS} ${LIB_OBJS}
+	rm -f libcommbus.so uart_resp uart_send spi_fram socket_send socket_resp ${UART_SEND_OBJS} ${UART_RESP_OBJS} ${SOCKET_SEND_OBJS} ${SOCKET_RESP_OBJS} ${SPI_FRAM_OBJS} ${LIB_OBJS}
 
