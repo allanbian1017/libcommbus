@@ -1,2 +1,11 @@
 # libcommbus
-library for communication bus
+
+It's a communication bus wrapper
+
+## Usage
+
+Build library and test utils
+
+```
+make
+```
